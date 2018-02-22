@@ -49,7 +49,20 @@ app.post('/coffees', (request, response) => {
   });
 });
 
-app.put('/coffees/:id', (request, response) => {});
+// -- Patch an existing coffee
+app.patch('/coffees/:id', (request, response) => {
+  const coffeeId = request.params.id;
+  const { origin, flavor, roast, price } = request.body;
+
+  knex('coffees')
+  .where('id', coffeeId)
+  .returning('*')
+  .update({ origin, flavor, roast, price })
+  .then( rows => {
+    const coffee = rows[0];
+    response.json(coffee);
+  });
+});
 
 app.delete('/coffees/:id', (request, response) => {});
 
