@@ -64,7 +64,13 @@ app.patch('/coffees/:id', (request, response) => {
   });
 });
 
-app.delete('/coffees/:id', (request, response) => {});
+app.delete('/coffees/:id', (request, response) => {
+  const coffeeId = request.params.id;
+  knex('coffees')
+  .where('id', coffeeId)
+  .del()
+  .then( response.send('Deleted.'));
+});
 
 // Listening
 app.listen( PORT, () => {
