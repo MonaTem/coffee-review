@@ -26,7 +26,7 @@ app.get('/coffees', (request, response) => {
 app.get('/coffees/:id', (request, response) => {
   const coffeeId = request.params.id;
   knex('coffees')
-  .where('id', coffeeId) // SELECT * FROM coffees WHERE id=coffeeId;
+  .where('id', coffeeId) // SELECT * FROM coffees WHERE id = coffeeId;
   .then( rows => {
     const foundCoffee = rows[0];
     response.json(foundCoffee);
@@ -57,7 +57,9 @@ app.patch('/coffees/:id', (request, response) => {
   knex('coffees')
   .where('id', coffeeId)
   .returning('*')
-  .update({ origin, flavor, roast, price })
+  .update({ origin, flavor, roast, price,
+    updated_at: knex.fn.now()
+  })
   .then( rows => {
     const coffee = rows[0];
     response.json(coffee);
