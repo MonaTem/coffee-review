@@ -11,17 +11,29 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Routes
+// -- Test Slash route
 app.get('/', (request, response) => {
   response.send('The slash route is working, so you better start working.');
 });
 
+// -- Get all coffees
 app.get('/coffees', (request, response) => {
   knex('coffees')
   .then( rows => response.json(rows));
 });
 
-app.get('/coffees/:id', (request, response) => {});
+// -- Get a single coffee
+app.get('/coffees/:id', (request, response) => {
+  const coffeeId = request.params.id;
+  knex('coffees')
+  .where('id', coffeeId) // SELECT * FROM coffees WHERE id=coffeeId;
+  .then( rows => {
+    const foundCoffee = rows[0];
+    response.json(foundCoffee);
+  })
+});
 
+// -- Post a new coffee
 app.post('/coffees', (request, response) => {
   // origin, flavor, roast, price
   console.log(`request.body: ${request.body}`); // debug
